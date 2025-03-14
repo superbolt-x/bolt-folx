@@ -1,1 +1,22 @@
 version: 2
+
+- name: gsheet_raw
+  schema: gsheet_raw
+  tables:
+    - name: memberships
+      identifier: memberships
+
+- name: reporting
+  schema: reporting
+  tables:
+    - name: googleads_campaign_performance
+      identifier: folx_googleads_campaign_performance
+      
+    - name: tiktok_ad_performance
+      identifier: folx_tiktok_ad_performance
+
+    - name: reddit_performance_by_ad
+      identifier: folx_reddit_performance_by_ad
+
+    - name: facebook_campaign_performance
+      identifier: folx_facebook_campaign_performance
