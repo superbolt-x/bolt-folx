@@ -2,6 +2,8 @@
     alias = target.database + '_blended_performance'
 )}}
 
+{%- set date_granularity_list = ['day','week','month','quarter','year'] -%}
+
 -- Facebook data
 (SELECT 
     'Facebook' as channel,
@@ -66,12 +68,13 @@ GROUP BY channel, campaign_name, date, date_granularity)
 
 UNION ALL
 
--- Trials/Membership data
+-- Trials/Membership data with all date granularities
+{% for date_granularity in date_granularity_list %}
 (SELECT 
     'Memberships' as channel,
     NULL as campaign_name,
-    date,
-    'day' as date_granularity,
+    {{ date_granularity }} as date,
+    '{{ date_granularity }}' as date_granularity,
     0 as spend,
     0 as impressions,
     0 as clicks,
@@ -79,3 +82,5 @@ UNION ALL
     COALESCE(SUM(memberships), 0) as memberships
 FROM {{ source('gsheet_raw', 'memberships') }}
 GROUP BY channel, campaign_name, date, date_granularity)
+{% if not loop.last %}UNION ALL{% endif %}
+{% endfor %}
