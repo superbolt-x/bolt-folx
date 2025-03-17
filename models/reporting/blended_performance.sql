@@ -45,7 +45,7 @@ UNION ALL
     COALESCE(SUM(clicks), 0) as clicks,
     0 as trials,
     0 as memberships
-FROM {{ source('reporting', 'tiktok_ads_performance') }}
+FROM {{ source('reporting', 'tiktok_ad_performance') }}
 GROUP BY channel, campaign_name, date, date_granularity)
 
 UNION ALL
