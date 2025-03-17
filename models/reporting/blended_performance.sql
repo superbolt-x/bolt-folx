@@ -29,7 +29,7 @@ UNION ALL
     COALESCE(SUM(clicks), 0) as clicks,
     0 as trials,
     0 as memberships
-FROM {{ source('reporting', 'folx_googleads_campaign_performance') }}
+FROM {{ source('reporting', 'googleads_campaign_performance') }}
 GROUP BY channel, campaign_name, date, date_granularity)
 
 UNION ALL
