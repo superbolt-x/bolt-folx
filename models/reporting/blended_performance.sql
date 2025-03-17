@@ -73,7 +73,7 @@ UNION ALL
 (SELECT 
     'Memberships' as channel,
     NULL as campaign_name,
-    {{ date_granularity }} as date,
+    date_trunc('{{ date_granularity }}', date) AS date,
     '{{ date_granularity }}' as date_granularity,
     0 as spend,
     0 as impressions,
