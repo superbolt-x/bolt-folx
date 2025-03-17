@@ -73,7 +73,7 @@ UNION ALL
 (SELECT 
     'Memberships' as channel,
     NULL as campaign_name,
-    date_trunc('{{ date_granularity }}', date) AS date,
+    date_trunc('{{ date_granularity }}', date)::date AS date,
     '{{ date_granularity }}' as date_granularity,
     0 as spend,
     0 as impressions,
@@ -81,6 +81,6 @@ UNION ALL
     COALESCE(SUM(trials), 0) as trials,
     COALESCE(SUM(memberships), 0) as memberships
 FROM {{ source('gsheet_raw', 'memberships') }}
-GROUP BY channel, campaign_name, date, date_granularity)
+GROUP BY 1,2,3,4)
 {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}
