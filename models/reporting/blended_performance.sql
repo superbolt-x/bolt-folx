@@ -12,9 +12,9 @@ WITH initial_memb_data as
 -- Facebook data
 SELECT 
     'Facebook' as channel,
-    campaign_name,
-    date,
-    date_granularity,
+    campaign_name::varchar,
+    date::date,
+    date_granularity::varchar,
     COALESCE(SUM(spend), 0) as spend,
     COALESCE(SUM(impressions), 0) as impressions,
     COALESCE(SUM(link_clicks), 0) as clicks,
@@ -28,9 +28,9 @@ UNION ALL
 -- Google Adwords data
 SELECT 
     'Google' as channel,
-    campaign_name,
-    date,
-    date_granularity,
+    campaign_name::varchar,
+    date::date,
+    date_granularity::varchar,
     COALESCE(SUM(spend), 0) as spend,
     COALESCE(SUM(impressions), 0) as impressions,
     COALESCE(SUM(clicks), 0) as clicks,
@@ -44,9 +44,9 @@ UNION ALL
 -- TikTok data
 SELECT 
     'TikTok' as channel,
-    campaign_name,
-    date,
-    date_granularity,
+    campaign_name::varchar,
+    date::date,
+    date_granularity::varchar,
     COALESCE(SUM(spend), 0) as spend,
     COALESCE(SUM(impressions), 0) as impressions,
     COALESCE(SUM(clicks), 0) as clicks,
@@ -60,9 +60,9 @@ UNION ALL
 -- Reddit data
 SELECT 
     'Reddit' as channel,
-    campaign_name,
-    date,
-    date_granularity,
+    campaign_name::varchar,
+    date::date,
+    date_granularity::varchar,
     COALESCE(SUM(spend), 0) as spend,
     COALESCE(SUM(impressions), 0) as impressions,
     COALESCE(SUM(clicks), 0) as clicks,
@@ -77,9 +77,9 @@ UNION ALL
 {% for date_granularity in date_granularity_list %}
 SELECT 
     'Memberships' as channel,
-    NULL as campaign_name,
-    '{{date_granularity}}' as date_granularity,
-    {{date_granularity}} as date,
+    NULL::varchar as campaign_name,
+    '{{date_granularity}}'::varchar as date_granularity,
+    {{date_granularity}}::date as date,
     0 as spend,
     0 as impressions,
     0 as clicks,
