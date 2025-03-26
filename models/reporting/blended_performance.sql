@@ -5,7 +5,7 @@
 {%- set date_granularity_list = ['day','week','month','quarter','year'] -%}
 
 WITH initial_memb_data as
-    (SELECT *, date::date as date, {{ get_date_parts('date') }}
+    (SELECT *, date::date as date_adj, {{ get_date_parts('date_adj') }}
     FROM {{ source('gsheet_raw', 'memberships') }}
     )
     
