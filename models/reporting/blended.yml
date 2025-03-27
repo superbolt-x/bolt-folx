@@ -20,5 +20,8 @@ sources:
     - name: reddit_performance_by_ad
       identifier: folx_reddit_performance_by_ad
 
+    - name: reddit_performance_by_campaign
+      identifier: folx_reddit_performance_by_campaign
+
     - name: facebook_campaign_performance
       identifier: folx_facebook_campaign_performance
