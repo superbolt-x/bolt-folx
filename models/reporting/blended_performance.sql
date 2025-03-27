@@ -63,7 +63,7 @@ UNION ALL
     COALESCE(SUM(clicks), 0) as clicks,
     0 as trials,
     0 as memberships
-FROM {{ source('reporting', 'reddit_performance_by_ad') }}
+FROM {{ source('reporting', 'reddit_performance_by_campaign') }}
 GROUP BY channel, campaign_name, date, date_granularity)
 
 UNION ALL
