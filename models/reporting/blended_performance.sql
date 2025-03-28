@@ -12,6 +12,10 @@ initial_fb_data as (
     SELECT *, {{ get_date_parts('date') }}
     FROM {{ source('facebook_raw', 'campaigns_insights_region') }}
 ),
+initial_reddit_data as (
+    SELECT *, {{ get_date_parts('date') }}
+    FROM {{ source('reddit_raw', 'campaign_region_insights') }}
+),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
@@ -117,21 +121,20 @@ FROM
     
     SELECT 
         'Reddit' as channel, 
-        campaign_name, 
+        campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
-            ELSE rp.date::date 
-        END as date, 
+            ELSE rp.{{date_granularity}} 
+        END as date,
         '{{date_granularity}}' as date_granularity,
-        'USA' as region,
-        spend, 
-        impressions, 
-        clicks, 
-        0 as trials, 
+        metro as region,
+        spend,
+        impressions,
+        clicks,
+        0 as trials,
         0 as memberships
-    FROM {{ source('reporting', 'reddit_performance_by_ad') }} rp
+    FROM initial_reddit_data rp
     JOIN date_functions df ON rp.date::date = df.date
-    WHERE rp.date_granularity = '{{date_granularity}}'
     
     UNION ALL
     

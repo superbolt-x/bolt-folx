@@ -14,6 +14,12 @@ sources:
     - name: campaigns_insights_region
       identifier: campaigns_insights_region
 
+- name: reddit_raw
+  schema: reddit_raw
+  tables:
+    - name: campaign_region_insights
+      identifier: campaign_region_insights
+
 - name: reporting
   schema: reporting
   tables:
