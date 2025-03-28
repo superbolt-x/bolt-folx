@@ -13,6 +13,11 @@ SELECT channel, campaign_name, date, date_granularity, COALESCE(SUM(spend), 0) a
     COALESCE(SUM(trials), 0) as trials, COALESCE(SUM(memberships), 0) as memberships
 FROM
         ({% for date_granularity in date_granularity_list %}
+        SELECT 
+            'Facebook' as channel, campaign_name, date::date as date, date_granularity, 
+                spend, impressions, link_clicks as clicks, 0 as trials, 0 as memberships
+        FROM {{ source('reporting', 'facebook_campaign_performance') }}
+        UNION ALL
         SELECT 'Memberships' as channel, NULL::varchar as campaign_name, {{date_granularity}} as date, '{{date_granularity}}' as date_granularity, 
             0::integer as spend, 0::integer as impressions, 0::integer as clicks, trials, memberships
         FROM initial_memb_data
