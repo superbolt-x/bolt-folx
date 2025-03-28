@@ -51,6 +51,7 @@ SELECT
     campaign_name, 
     date, 
     date_granularity,
+    region,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
     COALESCE(SUM(clicks), 0) as clicks,
