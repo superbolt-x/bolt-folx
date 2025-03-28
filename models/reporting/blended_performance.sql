@@ -10,7 +10,7 @@ WITH initial_memb_data as (
 ),
 initial_fb_data as (
     SELECT *, {{ get_date_parts('date') }}
-    FROM {{ source('facebook_raw', 'account_insights_region') }}
+    FROM {{ source('facebook_raw', 'campaigns_insights_region') }}
 ),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
@@ -26,7 +26,7 @@ date_functions as (
         DATE_TRUNC('year', date)::date as year
     FROM (
         SELECT DISTINCT date::date as date
-        FROM {{ source('facebook_raw', 'account_insights_region') }}
+        FROM {{ source('facebook_raw', 'campaigns_insights_region') }}
         UNION
         SELECT DISTINCT date::date as date 
         FROM {{ source('reporting', 'googleads_campaign_performance') }}
