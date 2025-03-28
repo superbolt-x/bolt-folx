@@ -42,7 +42,8 @@ SELECT
     channel, 
     campaign_name, 
     date, 
-    date_granularity, 
+    date_granularity,
+    region,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
     COALESCE(SUM(clicks), 0) as clicks,
@@ -58,6 +59,7 @@ FROM
             ELSE fp.date::date 
         END as date, 
         '{{date_granularity}}' as date_granularity, 
+        'USA' as region,
         spend, 
         impressions, 
         link_clicks as clicks, 
@@ -77,6 +79,7 @@ FROM
             ELSE gp.date::date 
         END as date, 
         '{{date_granularity}}' as date_granularity, 
+        'USA' as region,
         spend, 
         impressions, 
         clicks, 
@@ -96,6 +99,7 @@ FROM
             ELSE tp.date::date 
         END as date, 
         '{{date_granularity}}' as date_granularity, 
+        'USA' as region,
         spend, 
         impressions, 
         clicks, 
@@ -114,7 +118,8 @@ FROM
             THEN df.week
             ELSE rp.date::date 
         END as date, 
-        '{{date_granularity}}' as date_granularity, 
+        '{{date_granularity}}' as date_granularity,
+        'USA' as region,
         spend, 
         impressions, 
         clicks, 
@@ -127,13 +132,14 @@ FROM
     UNION ALL
     
     SELECT 
-        'Memberships' as channel, 
-        NULL::varchar as campaign_name, 
+        'Memberships' as channel,
+        NULL::varchar as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE m.{{date_granularity}} 
         END as date, 
-        '{{date_granularity}}' as date_granularity, 
+        '{{date_granularity}}' as date_granularity,
+        region,
         0::integer as spend, 
         0::integer as impressions, 
         0::integer as clicks, 
@@ -143,4 +149,4 @@ FROM
     JOIN date_functions df ON m.date::date = df.date
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %})
-GROUP BY channel, campaign_name, date, date_granularity
+GROUP BY channel, campaign_name, date, date_granularity, region
