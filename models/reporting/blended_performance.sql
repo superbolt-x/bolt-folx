@@ -26,7 +26,7 @@ date_functions as (
         DATE_TRUNC('year', date)::date as year
     FROM (
         SELECT DISTINCT date::date as date
-        FROM {{ source('reporting', 'facebook_campaign_performance') }}
+        FROM {{ source('facebook_raw', 'account_insights_region') }}
         UNION
         SELECT DISTINCT date::date as date 
         FROM {{ source('reporting', 'googleads_campaign_performance') }}
@@ -68,7 +68,7 @@ FROM
         inline_link_clicks as clicks, 
         0 as trials, 
         0 as memberships
-    FROM {{ source('reporting', 'facebook_campaign_performance') }} fp
+    FROM initial_fb_data fp
     JOIN date_functions df ON fp.date::date = df.date
     WHERE fp.date_granularity = '{{date_granularity}}'
     
