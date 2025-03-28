@@ -48,7 +48,7 @@ date_functions as (
 
 SELECT 
     channel, 
-    campaign_name, 
+    campaign_name::varchar as campaign_name, 
     date, 
     date_granularity,
     region,
@@ -61,7 +61,7 @@ FROM
     ({% for date_granularity in date_granularity_list %}
     SELECT
         'Facebook' as channel, 
-        campaign_name, 
+        campaign_name::varchar as campaign_name, 
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE fp.{{date_granularity}}
@@ -82,7 +82,7 @@ FROM
     
     SELECT 
         'Google' as channel, 
-        campaign_name, 
+        campaign_name::varchar as campaign_name, 
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE gp.date::date 
@@ -102,7 +102,7 @@ FROM
     
     SELECT 
         'TikTok' as channel, 
-        campaign_name, 
+        campaign_name::varchar as campaign_name, 
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE tp.date::date 
@@ -122,7 +122,7 @@ FROM
     
     SELECT 
         'Reddit' as channel, 
-        campaign_id as campaign_name,
+        campaign_id::varchar as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE rp.{{date_granularity}} 
