@@ -14,7 +14,7 @@ SELECT channel, campaign_name, date, date_granularity, COALESCE(SUM(spend), 0) a
 FROM
         ({% for date_granularity in date_granularity_list %}
         SELECT 'Memberships' as channel, NULL::varchar as campaign_name, {{date_granularity}} as date, '{{date_granularity}}' as date_granularity, 
-            0 as spend, 0 as impressions, 0 as clicks, trials, memberships
+            0::integer as spend, 0::integer as impressions, 0::integer as clicks, trials, memberships
         FROM initial_memb_data
         {% if not loop.last %}UNION ALL{% endif %}
         {% endfor %})
