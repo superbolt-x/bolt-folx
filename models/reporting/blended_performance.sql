@@ -39,7 +39,7 @@ date_functions as (
         FROM {{ source('reporting', 'tiktok_ad_performance') }}
         UNION
         SELECT DISTINCT date::date as date
-        FROM {{ source('reporting', 'reddit_performance_by_ad') }}
+        FROM {{ source('reddit_raw', 'campaign_region_insights') }}
         UNION
         SELECT DISTINCT date::date as date
         FROM initial_memb_data
@@ -122,7 +122,7 @@ FROM
     
     SELECT 
         'Reddit' as channel, 
-        campaign_name,
+        campaign_id as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE rp.{{date_granularity}} 
