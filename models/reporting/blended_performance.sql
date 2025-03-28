@@ -16,6 +16,10 @@ initial_reddit_data as (
     SELECT *, {{ get_date_parts('date') }}
     FROM {{ source('reddit_raw', 'campaign_region_insights') }}
 ),
+initial_google_data as (
+    SELECT *, {{ get_date_parts('date') }}
+    FROM {{ source('googleads_raw', 'account_region_report') }}
+),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
@@ -82,21 +86,20 @@ FROM
     
     SELECT 
         'Google' as channel, 
-        campaign_name::varchar as campaign_name, 
+        campaign_name::varchar as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
-            ELSE gp.date::date 
-        END as date, 
-        '{{date_granularity}}' as date_granularity, 
-        'USA' as region,
-        spend, 
-        impressions, 
-        clicks, 
-        0 as trials, 
+            ELSE gp.{{date_granularity}} 
+        END as date,
+        '{{date_granularity}}' as date_granularity,
+        geo_target_state::varchar as region,
+        cost_micros as spend,
+        impressions,
+        clicks,
+        0 as trials,
         0 as memberships
-    FROM {{ source('reporting', 'googleads_campaign_performance') }} gp
+    FROM initial_google_data gp
     JOIN date_functions df ON gp.date::date = df.date
-    WHERE gp.date_granularity = '{{date_granularity}}'
     
     UNION ALL
     

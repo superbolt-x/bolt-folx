@@ -20,6 +20,12 @@ sources:
     - name: campaign_region_insights
       identifier: campaign_region_insights
 
+- name: googleads_raw
+  schema: googleads_raw
+  tables:
+    - name: account_region_report
+      identifier: account_region_report
+
 - name: reporting
   schema: reporting
   tables:
