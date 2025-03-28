@@ -4,11 +4,6 @@
 
 {%- set date_granularity_list = ['day','week','month','quarter','year'] -%}
 
---WITH initial_memb_data as
---    (SELECT *, {{ get_date_parts('date') }}
---    FROM {{ source('gsheet_raw', 'memberships') }}
---    )
-
 SELECT channel, campaign_name, date, date_granularity, COALESCE(SUM(spend), 0) as spend, COALESCE(SUM(impressions), 0) as impressions, COALESCE(SUM(clicks), 0) as clicks,
     COALESCE(SUM(trials), 0) as trials, COALESCE(SUM(memberships), 0) as memberships
 FROM
