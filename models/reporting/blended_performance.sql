@@ -8,6 +8,10 @@ WITH initial_memb_data as (
     SELECT *, {{ get_date_parts('date') }}
     FROM {{ source('gsheet_raw', 'memberships') }}
 ),
+initial_fb_data as (
+    SELECT *, {{ get_date_parts('date') }}
+    FROM {{ source('facebook_raw', 'account_insights_region') }}
+),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
@@ -43,7 +47,6 @@ SELECT
     campaign_name, 
     date, 
     date_granularity,
-    region,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
     COALESCE(SUM(clicks), 0) as clicks,
@@ -51,18 +54,18 @@ SELECT
     COALESCE(SUM(memberships), 0) as memberships
 FROM
     ({% for date_granularity in date_granularity_list %}
-    SELECT 
+    SELECT
         'Facebook' as channel, 
         campaign_name, 
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
-            ELSE fp.date::date 
+            ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity, 
-        'USA' as region,
+        get_state_code(region) as region,
         spend, 
         impressions, 
-        link_clicks as clicks, 
+        inline_link_clicks as clicks, 
         0 as trials, 
         0 as memberships
     FROM {{ source('reporting', 'facebook_campaign_performance') }} fp
