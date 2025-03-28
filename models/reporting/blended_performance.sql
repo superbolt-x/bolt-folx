@@ -72,7 +72,6 @@ FROM
         0 as memberships
     FROM initial_fb_data fp
     JOIN date_functions df ON fp.date::date = df.date
-    WHERE fp.date_granularity = '{{date_granularity}}'
     
     UNION ALL
     
