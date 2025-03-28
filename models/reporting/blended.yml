@@ -7,6 +7,12 @@ sources:
   tables:
     - name: memberships
       identifier: memberships
+  
+- name: facebook_raw
+  schema: facebook_raw
+  tables:
+    - name: account_insights_region
+      identifier: account_insights_region
 
 - name: reporting
   schema: reporting
