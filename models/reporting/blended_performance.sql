@@ -69,7 +69,7 @@ FROM
         '{{date_granularity}}' as date_granularity,
         -- TODO: fix the conversion of region to state code
         --get_state_code('region') as region,
-        region,
+        region::varchar as region,
         spend, 
         impressions, 
         inline_link_clicks as clicks, 
@@ -128,7 +128,7 @@ FROM
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        metro as region,
+        metro::varchar as region,
         spend,
         impressions,
         clicks,
@@ -147,7 +147,7 @@ FROM
             ELSE m.{{date_granularity}} 
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region,
+        region::varchar as region,
         0::integer as spend, 
         0::integer as impressions, 
         0::integer as clicks, 
