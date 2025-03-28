@@ -34,7 +34,7 @@ FROM
         FROM {{ source('reporting', 'reddit_performance_by_ad') }}
         UNION ALL
         SELECT 'Memberships' as channel, NULL::varchar as campaign_name, '{{date_granularity}}' as date_granularity, {{date_granularity}} as date,
-            0 as spend, 0 as impressions, 0 as clicks, trials::varchar a trials, memberships::varchar as memberships
+            0 as spend, 0 as impressions, 0 as clicks, trials, memberships
         FROM initial_memb_data
         {% if not loop.last %}UNION ALL{% endif %}
         {% endfor %})
