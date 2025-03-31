@@ -59,7 +59,7 @@ SELECT
     campaign_name::varchar as campaign_name, 
     date, 
     date_granularity,
-    region,
+    us_state,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
     COALESCE(SUM(clicks), 0) as clicks,
