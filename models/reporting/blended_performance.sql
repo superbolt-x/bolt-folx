@@ -73,7 +73,7 @@ FROM
         '{{date_granularity}}' as date_granularity,
         -- TODO: fix the conversion of region to state code
         --get_state_code('region') as region,
-        region::varchar as region,
+        get_state_code(region) as region,
         spend, 
         impressions, 
         inline_link_clicks as clicks, 
