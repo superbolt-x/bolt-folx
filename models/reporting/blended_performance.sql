@@ -44,7 +44,7 @@ date_functions as (
         FROM {{ source('googleads_raw', 'account_region_report') }}
         UNION
         SELECT DISTINCT date::date as date
-        FROM {{ source('supermetrics_raw', 'tiktok_ad_performance') }}
+        FROM {{ source('supermetrics_raw', 'tik_campaign_insights_region') }}
         UNION
         SELECT DISTINCT date::date as date
         FROM {{ source('reddit_raw', 'campaign_region_insights') }}
