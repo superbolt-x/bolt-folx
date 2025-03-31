@@ -26,8 +26,8 @@ sources:
     - name: account_region_report
       identifier: account_region_report
   
-- name: supermetric_raw
-  schema: supermetric_raw
+- name: supermetrics_raw
+  schema: supermetrics_raw
   tables:
     - name: tik_campaign_insights_region
       identifier: tik_campaign_insights_region
