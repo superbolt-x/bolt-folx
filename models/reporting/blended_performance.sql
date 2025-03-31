@@ -90,7 +90,7 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        geo_target_state::varchar as region,
+        {{google_id_to_state_code('geo_target_state') }} as region,
         cost_micros as spend,
         impressions,
         clicks,
