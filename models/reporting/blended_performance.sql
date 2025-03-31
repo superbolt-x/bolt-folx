@@ -71,7 +71,7 @@ FROM
             ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        get_state_code('region') as region,
+        {{ get_state_code('region') }} as region,
         spend, 
         impressions, 
         inline_link_clicks as clicks, 
