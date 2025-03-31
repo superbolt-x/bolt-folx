@@ -20,6 +20,10 @@ initial_google_data as (
     SELECT *, {{ get_date_parts('date') }}
     FROM {{ source('googleads_raw', 'account_region_report') }}
 ),
+initial_tiktok_data as (
+    SELECT *, {{ get_date_parts('date') }}
+    FROM {{ source('supermetrics_raw', 'tik_campaign_insights_region') }}
+),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
@@ -37,10 +41,10 @@ date_functions as (
         FROM {{ source('facebook_raw', 'campaigns_insights_region') }}
         UNION
         SELECT DISTINCT date::date as date 
-        FROM {{ source('reporting', 'googleads_campaign_performance') }}
+        FROM {{ source('googleads_raw', 'account_region_report') }}
         UNION
         SELECT DISTINCT date::date as date
-        FROM {{ source('reporting', 'tiktok_ad_performance') }}
+        FROM {{ source('supermetrics_raw', 'tiktok_ad_performance') }}
         UNION
         SELECT DISTINCT date::date as date
         FROM {{ source('reddit_raw', 'campaign_region_insights') }}
@@ -103,21 +107,20 @@ FROM
     
     SELECT 
         'TikTok' as channel, 
-        campaign_name::varchar as campaign_name, 
+        campaign_name::varchar as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
-            ELSE tp.date::date 
-        END as date, 
-        '{{date_granularity}}' as date_granularity, 
-        'USA' as region,
-        spend, 
-        impressions, 
-        clicks, 
-        0 as trials, 
+            ELSE tp.{{date_granularity}} 
+        END as date,
+        '{{date_granularity}}' as date_granularity,
+        {{ state_name_to_code('region') }} as region,
+        spend,
+        impressions,
+        clicks,
+        0 as trials,
         0 as memberships
-    FROM {{ source('reporting', 'tiktok_ad_performance') }} tp
+    FROM initial_tiktok_data tp
     JOIN date_functions df ON tp.date::date = df.date
-    WHERE tp.date_granularity = '{{date_granularity}}'
     
     UNION ALL
     
