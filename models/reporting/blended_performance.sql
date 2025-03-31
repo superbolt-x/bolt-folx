@@ -75,7 +75,7 @@ FROM
             ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        {{ state_name_to_code('region') }} as region,
+        {{ state_name_to_code('region') }} as us_state,
         spend, 
         impressions, 
         inline_link_clicks as clicks, 
@@ -94,7 +94,7 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        {{google_id_to_state_code('geo_target_state') }} as region,
+        {{google_id_to_state_code('geo_target_state') }} as us_state,
         cost_micros as spend,
         impressions,
         clicks,
@@ -113,8 +113,8 @@ FROM
             ELSE tp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        {{ state_name_to_code('region') }} as region,
-        spend,
+        {{ state_name_to_code('province_name') }} as us_state,
+        cost as spend,
         impressions,
         clicks,
         0 as trials,
@@ -132,7 +132,7 @@ FROM
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        {{ dma_to_state_code('metro') }} as region,
+        {{ dma_to_state_code('metro') }} as us_state,
         spend,
         impressions,
         clicks,
@@ -151,7 +151,7 @@ FROM
             ELSE m.{{date_granularity}} 
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region::varchar as region,
+        region::varchar as us_state,
         0::integer as spend, 
         0::integer as impressions, 
         0::integer as clicks, 
