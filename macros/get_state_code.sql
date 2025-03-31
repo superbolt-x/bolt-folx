@@ -53,7 +53,11 @@
     "wyoming": "WY"
 } %}
 
-{%- set normalized_name = state_name | trim | lower -%}
-{{ state_code[normalized_name] if normalized_name in state_code else state_name }}
+CASE 
+    {% for state_full, state_abbr in state_code.items() %}
+    WHEN LOWER(TRIM({{ state_name }})) = '{{ state_full }}' THEN '{{ state_abbr }}'
+    {% endfor %}
+    ELSE {{ state_name }}
+END
   
 {%- endmacro -%}
