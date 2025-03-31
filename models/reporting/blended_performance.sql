@@ -129,7 +129,7 @@ FROM
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        metro::varchar as region,
+        {{ dma_to_state_code('region') }} as region,
         spend,
         impressions,
         clicks,
