@@ -59,6 +59,7 @@ SELECT
     campaign_name::varchar as campaign_name, 
     date, 
     date_granularity,
+    original_region,
     us_state,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
@@ -75,6 +76,7 @@ FROM
             ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity,
+        region as original_region,
         {{ state_name_to_code('region') }} as us_state,
         spend, 
         impressions, 
@@ -94,7 +96,8 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        {{google_id_to_state_code('geo_target_state') }} as us_state,
+        gp.state_id as original_region,
+        g.region as us_state,
         cost_micros as spend,
         impressions,
         clicks,
@@ -102,6 +105,8 @@ FROM
         0 as memberships
     FROM initial_google_data gp
     JOIN date_functions df ON gp.date::date = df.date
+    LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON gp.state_id = g.dma
+    WHERE g.country = 'US' AND g.dma != 0
     
     UNION ALL
     
@@ -113,6 +118,7 @@ FROM
             ELSE tp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
+        province_name as original_region,
         {{ state_name_to_code('province_name') }} as us_state,
         cost as spend,
         impressions,
@@ -132,6 +138,7 @@ FROM
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
+        metro as original_region,
         g.region as us_state,
         spend,
         impressions,
@@ -153,6 +160,7 @@ FROM
             ELSE m.{{date_granularity}} 
         END as date, 
         '{{date_granularity}}' as date_granularity,
+        region::varchar as original_region,
         region::varchar as us_state,
         0::integer as spend, 
         0::integer as impressions, 

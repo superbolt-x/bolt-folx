@@ -27,6 +27,8 @@ sources:
   tables:
     - name: account_region_report
       identifier: account_region_report
+    - name: geo_target
+      identifier: geo_target
   
 - name: supermetrics_raw
   schema: supermetrics_raw
