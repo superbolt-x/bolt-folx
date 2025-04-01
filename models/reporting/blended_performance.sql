@@ -96,7 +96,7 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        gp.state_id as original_region,
+        gp.geo_target_state as original_region,
         g.region as us_state,
         cost_micros as spend,
         impressions,
@@ -105,7 +105,7 @@ FROM
         0 as memberships
     FROM initial_google_data gp
     JOIN date_functions df ON gp.date::date = df.date
-    LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON gp.state_id = g.dma
+    LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON REPLACE(gp.geo_target_state, 'geoTargetConstants/', '') = g.dma
     WHERE g.country = 'US' AND g.dma != 0
     
     UNION ALL
