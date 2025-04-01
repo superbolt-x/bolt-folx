@@ -97,7 +97,7 @@ FROM
         END as date,
         '{{date_granularity}}' as date_granularity,
         gp.geo_target_state::varchar as original_region,
-        g.country_code as us_state,
+        {{ state_name_to_code(g.name) }} as us_state,
         cost_micros as spend,
         impressions,
         clicks,
