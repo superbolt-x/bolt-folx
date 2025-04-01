@@ -76,7 +76,7 @@ FROM
             ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region as original_region,
+        region::varchar as original_region,
         {{ state_name_to_code('region') }} as us_state,
         spend, 
         impressions, 
@@ -96,7 +96,7 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        gp.geo_target_state as original_region,
+        gp.geo_target_state::varchar as original_region,
         g.country_code as us_state,
         cost_micros as spend,
         impressions,
@@ -117,7 +117,7 @@ FROM
             ELSE tp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        province_name as original_region,
+        province_name::varchar as original_region,
         {{ state_name_to_code('province_name') }} as us_state,
         cost as spend,
         impressions,
@@ -137,7 +137,7 @@ FROM
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        metro as original_region,
+        metro::varchar as original_region,
         g.region as us_state,
         spend,
         impressions,
@@ -159,7 +159,7 @@ FROM
             ELSE m.{{date_granularity}} 
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region::varchar as original_region,
+        region::varchar::varchar as original_region,
         region::varchar as us_state,
         0::integer as spend, 
         0::integer as impressions, 
