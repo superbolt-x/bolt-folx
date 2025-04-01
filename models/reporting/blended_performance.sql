@@ -105,8 +105,8 @@ FROM
         0 as memberships
     FROM initial_google_data gp
     JOIN date_functions df ON gp.date::date = df.date
-    LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON REPLACE(gp.geo_target_state, 'geoTargetConstants/', '') = g.dma
-    WHERE g.country = 'US' AND g.dma != 0
+    LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON REPLACE(gp.geo_target_state, 'geoTargetConstants/', '') = g.id
+    WHERE g.country = 'US' AND g.id != 0
     
     UNION ALL
     
@@ -171,4 +171,4 @@ FROM
     JOIN date_functions df ON m.date::date = df.date
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %})
-GROUP BY channel, campaign_name, date, date_granularity, us_state
+GROUP BY channel, campaign_name, date, date_granularity, us_state, original_region
