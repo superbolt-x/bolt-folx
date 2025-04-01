@@ -31,7 +31,7 @@ date_functions as (
         -- Keep day as is
         date as day,
         -- Adjust week to start on Sunday (subtract 1 day from date to shift backward)
-        DATE_TRUNC('week', date - INTERVAL '1 day')::date + INTERVAL '1 day' as week,
+        DATE_TRUNC('week', date + INTERVAL '1 day')::date - INTERVAL '1 day' as week,
         -- Keep month, quarter, year as is
         DATE_TRUNC('month', date)::date as month,
         DATE_TRUNC('quarter', date)::date as quarter,
