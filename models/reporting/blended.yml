@@ -19,6 +19,8 @@ sources:
   tables:
     - name: campaign_region_insights
       identifier: campaign_region_insights
+    - name: geolocation
+      identifier: geolocation
 
 - name: googleads_raw
   schema: googleads_raw
