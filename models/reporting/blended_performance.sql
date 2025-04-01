@@ -161,4 +161,4 @@ FROM
     JOIN date_functions df ON m.date::date = df.date
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %})
-GROUP BY channel, campaign_name, date, date_granularity, region
+GROUP BY channel, campaign_name, date, date_granularity, us_state
