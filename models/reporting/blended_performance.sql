@@ -106,7 +106,6 @@ FROM
     FROM initial_google_data gp
     JOIN date_functions df ON gp.date::date = df.date
     LEFT JOIN {{ source('googleads_raw', 'geo_target') }} g ON REPLACE(gp.geo_target_state, 'geoTargetConstants/', '') = g.id
-    WHERE g.country = 'US' AND g.id != 0
     
     UNION ALL
     
