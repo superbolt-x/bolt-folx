@@ -99,7 +99,7 @@ FROM
         END as date,
         '{{date_granularity}}' as date_granularity,
         {{ state_name_to_code('name') }} as us_state,
-        cost_micros as spend,
+        cost_micros::float/1000000 as spend,
         impressions,
         clicks,
         0 as trials,
