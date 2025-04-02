@@ -159,6 +159,7 @@ FROM
         END as date, 
         '{{date_granularity}}' as date_granularity,
         region::varchar as us_state,
+        state_category,
         0::integer as spend, 
         0::integer as impressions, 
         0::integer as clicks, 
@@ -168,4 +169,5 @@ FROM
     JOIN date_functions df ON m.date::date = df.date
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %})
-GROUP BY channel, campaign_name, date, date_granularity, us_state
+LEFT JOIN (SELECT category as state_category, states::varchar as us_state FROM {{ source('gsheet_raw', 'state_category') }}) USING (us_state)
+GROUP BY channel, campaign_name, date, date_granularity, us_state, state_category
