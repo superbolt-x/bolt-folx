@@ -22,6 +22,12 @@ sources:
     - name: geolocation
       identifier: geolocation
 
+- name: reddit_base
+  schema: reddit_base
+  tables:
+    - name: reddit_campaigns
+      identifier: reddit_campaigns
+
 - name: googleads_raw
   schema: googleads_raw
   tables:
