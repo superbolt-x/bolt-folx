@@ -131,7 +131,7 @@ FROM
     
     SELECT 
         'Reddit' as channel, 
-        rc.campaign_name
+        rc.campaign_name as campaign_name,
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE rp.{{date_granularity}} 
