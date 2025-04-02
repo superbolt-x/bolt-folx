@@ -138,7 +138,7 @@ FROM
         END as date,
         '{{date_granularity}}' as date_granularity,
         g.region as us_state,
-        spend,
+        spend::float/1000000,
         impressions,
         clicks,
         0 as trials,
