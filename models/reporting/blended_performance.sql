@@ -27,7 +27,7 @@ initial_tiktok_data as (
 reddit_campaigns as (
     SELECT campaign_id, campaign_name
     FROM {{ source('reddit_base', 'reddit_campaigns') }}
-)
+),
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
