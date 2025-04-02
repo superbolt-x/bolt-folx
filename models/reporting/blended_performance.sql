@@ -145,8 +145,7 @@ FROM
         0 as memberships
     FROM initial_reddit_data rp
     JOIN date_functions df ON rp.date::date = df.date
-    LEFT JOIN {{ source('reddit_raw', 'geolocation') }} g ON rp.metro = g.dma
-    WHERE g.country = 'US' AND g.dma != 0
+    LEFT JOIN {{ source('reddit_raw', 'geolocation') }} g ON rp.metro = g.dma AND g.country = 'US' AND g.dma != 0
     LEFT JOIN reddit_campaigns rc ON rp.campaign_id = rc.campaign_id
     
     UNION ALL
