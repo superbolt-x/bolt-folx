@@ -24,6 +24,10 @@ initial_tiktok_data as (
     SELECT *, {{ get_date_parts('date') }}
     FROM {{ source('supermetrics_raw', 'tik_campaign_insights_region') }}
 ),
+reddit_campaigns as (
+    SELECT campaign_id, campaign_name
+    FROM {{ source('reddit_base', 'reddit_campaigns') }}
+)
 -- Add a date adjustment function for generating Sunday-based weeks
 date_functions as (
     SELECT 
@@ -59,7 +63,6 @@ SELECT
     campaign_name::varchar as campaign_name, 
     date, 
     date_granularity,
-    original_region,
     us_state,
     COALESCE(SUM(spend), 0) as spend, 
     COALESCE(SUM(impressions), 0) as impressions, 
@@ -76,7 +79,6 @@ FROM
             ELSE fp.{{date_granularity}}
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region::varchar as original_region,
         {{ state_name_to_code('region') }} as us_state,
         spend, 
         impressions, 
@@ -96,7 +98,6 @@ FROM
             ELSE gp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        gp.geo_target_state::varchar as original_region,
         {{ state_name_to_code('name') }} as us_state,
         cost_micros as spend,
         impressions,
@@ -117,7 +118,6 @@ FROM
             ELSE tp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        province_name::varchar as original_region,
         {{ state_name_to_code('province_name') }} as us_state,
         cost as spend,
         impressions,
@@ -131,13 +131,12 @@ FROM
     
     SELECT 
         'Reddit' as channel, 
-        campaign_id::varchar as campaign_name,
+        rc.campaign_name
         CASE WHEN '{{date_granularity}}' = 'week' 
             THEN df.week
             ELSE rp.{{date_granularity}} 
         END as date,
         '{{date_granularity}}' as date_granularity,
-        metro::varchar as original_region,
         g.region as us_state,
         spend,
         impressions,
@@ -148,6 +147,7 @@ FROM
     JOIN date_functions df ON rp.date::date = df.date
     LEFT JOIN {{ source('reddit_raw', 'geolocation') }} g ON rp.metro = g.dma
     WHERE g.country = 'US' AND g.dma != 0
+    LEFT JOIN reddit_campaigns rc ON rp.campaign_id = rc.campaign_id
     
     UNION ALL
     
@@ -159,7 +159,6 @@ FROM
             ELSE m.{{date_granularity}} 
         END as date, 
         '{{date_granularity}}' as date_granularity,
-        region::varchar::varchar as original_region,
         region::varchar as us_state,
         0::integer as spend, 
         0::integer as impressions, 
