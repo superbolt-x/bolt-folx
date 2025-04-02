@@ -7,6 +7,9 @@ sources:
   tables:
     - name: memberships
       identifier: memberships
+
+    - name: state_category
+      identifier: state_category
   
 - name: facebook_raw
   schema: facebook_raw
